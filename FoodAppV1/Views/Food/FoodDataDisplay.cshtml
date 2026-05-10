@@ -1,0 +1,31 @@
+﻿@model FoodAppV1.Models.FoodModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    if(Model == null) {<h1>The Model is null!</h1>}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Calories</th>
+                <th>Protein</th>
+                <th>Carbohydrates</th>
+                <th>Fat</th>
+                <th>Sugars</th>
+                <th>Fibers</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@Model.Description</td>
+                <td>@Model.LabelNutrients.Calories</td>
+                <td>@Model.LabelNutrients.Protein</td>
+                <td>@Model.LabelNutrients.Carbohydrates</td>
+                <td>@Model.LabelNutrients.Fat</td>
+                <td>@Model.LabelNutrients.Sugars</td>
+                <td>@Model.LabelNutrients.Fiber</td>
+            </tr>
+        </tbody>
+    </table>
+}
