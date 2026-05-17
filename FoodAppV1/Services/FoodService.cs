@@ -1,36 +1,43 @@
-﻿using System.Net.Http.Json;
-using FoodAppV1.Models;
+﻿using FoodAppV1.Models;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace FoodAppV1.Services
 {
     public class FoodService : IFoodService
     {
-        public readonly IHttpClientFactory _clientFactory;
+        private readonly IHttpClientFactory _clientFactory;
+        private readonly IConfiguration _config;
 
-        public FoodService(IHttpClientFactory clientFactory)
+        public FoodService(IHttpClientFactory clientFactory, IConfiguration config)
         {
             _clientFactory = clientFactory;
+            _config = config;
         }
 
-        public async Task<FoodModel> GetFoodInfo(string foodname)
+        public async Task<Food> GetFoodInfo(string foodname)
         {
-            FoodModel foodInfo = null;
-            string errorString;
-
             var client = _clientFactory.CreateClient("meta");
-            string requestUrl = client.BaseAddress + $"&query={foodname}";
+            var APIKey = _config.GetValue<string>("APIKey");
+
+            string requestUrl = client.BaseAddress.ToString() + "search?api_key=" + APIKey + "&query=" + Uri.EscapeDataString(foodname);
 
             try
             {
-                foodInfo = await client.GetFromJsonAsync<FoodModel>(requestUrl);
-                errorString = null;
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+                var foodInfo = await client.GetFromJsonAsync<FoodModel>(requestUrl);
+                return foodInfo?.foods.FirstOrDefault();
             }
             catch (Exception ex) 
             {
-                errorString = $"There was an error finding information about your food: {ex.Message}";
+                Console.WriteLine($"[FoodService Error] {ex.GetType().Name}: {ex.Message}");
+                return null;
             }
-
-            return foodInfo;
         }
     }
 }

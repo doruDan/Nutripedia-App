@@ -11,7 +11,6 @@ builder.Services.AddHttpClient();
 builder.Services.AddHttpClient("meta", c =>
 {
     c.BaseAddress = new Uri(builder.Configuration.GetValue<string>("MainKey"));
-    c.DefaultRequestHeaders.Add("APIKey",builder.Configuration.GetValue<string>("APIKey"));
 });
 
 var app = builder.Build();

@@ -1,31 +1,34 @@
-﻿@model FoodAppV1.Models.FoodModel
+﻿@model FoodAppV1.Models.Food
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-    if(Model == null) {<h1>The Model is null!</h1>}
+   
+    if(Model == null) {<h1>No food data found!</h1>}
+    
+    <h2>Nutritional Information for: @Model.description</h2>
+    <p><strong>ID: @Model.fdcId</strong></p>
+
+    <hr />
+
+    <h3>Nutrients</h3>
     <table class="table">
         <thead>
             <tr>
-                <th>Description</th>
-                <th>Calories</th>
-                <th>Protein</th>
-                <th>Carbohydrates</th>
-                <th>Fat</th>
-                <th>Sugars</th>
-                <th>Fibers</th>
+                <th>Nutrient</th>
+                <th>Value</th>
+                <th>Measurement Unit</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>@Model.Description</td>
-                <td>@Model.LabelNutrients.Calories</td>
-                <td>@Model.LabelNutrients.Protein</td>
-                <td>@Model.LabelNutrients.Carbohydrates</td>
-                <td>@Model.LabelNutrients.Fat</td>
-                <td>@Model.LabelNutrients.Sugars</td>
-                <td>@Model.LabelNutrients.Fiber</td>
-            </tr>
+            @foreach (var nutrient in Model.foodNutrients)
+            {
+                <tr>
+                    <td>@nutrient.nutrientName</td>
+                    <td>@nutrient.value</td>
+                    <td>@nutrient.unitName</td>
+                </tr>
+            }
         </tbody>
     </table>
 }
